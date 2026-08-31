@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Soft, elegant background gradient to make the menu pop */
+            background: radial-gradient(circle at center, #45455e 0%, #0d0d12 100%); 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* --- The Round Floating Container --- */
+        .menu-container {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            /* Glass effect */
+            background: rgba(39, 39, 53, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #2a2a35;
+            /* Floating shadow */
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.6),
+                0 0 80px rgba(80, 80, 120, 0.1);
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Inner Grid for Links --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+        }
+
+        /* --- Individual Link Buttons --- */
+        .menu-link {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(54, 54, 54, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 0 48px rgba(0, 89, 255, 0.15);
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .menu-link:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            color: #4773ad;
+            background: rgba(50, 64, 73, 0.5);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+
+        .menu-link:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <div class="menu-grid">
+            <a href="./NatsukiGlobal/index.html" class="menu-link">
+                <span>Natsuki Booper</span>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>
