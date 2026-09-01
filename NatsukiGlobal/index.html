@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Natsuki Booper</title>
+    <title>N&Y Booper</title>
     <style>
         * { margin:0; padding:0; }
         body, html {
@@ -12,11 +12,14 @@
             overflow: hidden;
             background: #ffffff;
         }
-        #main-image {
+        .image-wrap {
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+            height: 100vh;
+        }
+        #main-image {
             height: 100vh;
             width: auto;
             cursor: pointer;
@@ -33,6 +36,29 @@
             user-select: none;
             white-space: nowrap;
             text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+        }
+        #yuri_egg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(209, 0, 0, 0.5);
+            z-index: 9999;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
         .toggle {
             appearance: none;
@@ -59,7 +85,7 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
         }
         .toggle:checked {
-            background: #db73f0;
+            background: var(--character-color, #db73f0);
         }
         .toggle:checked::after {
             left: 26px;
@@ -80,15 +106,56 @@
             user-select: none;
         }
 
+        .select-fancy {
+            display: inline-block;
+            position: relative;
+        }
+
+        .select-fancy select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            border: 2px solid #b0b0b0;
+            padding: 10px 36px 10px 10px;
+
+            background-color: #ffffff;
+            font-size: 16px;
+            font-family: inherit;
+            color: #333;
+
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+            min-width: 1px;
+        }
+
+        .select-fancy select:hover,
+        .select-fancy select:focus {
+            border-color: var(--character-color, #db73f0);
+        }
+
+        .select-fancy::after {
+            content: "▼";
+            font-size: 12px;
+            color: #888;
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            transition: transform 0.2s;
+        }
+
     </style>
 
 </head>
 <body>
 
-
-    <img id="main-image" src="natsukiIdle.png" alt="idle">
-    <!-- <input type="checkbox" class="toggle" id="global_send_toggle">
-    <input type="checkbox" class="toggle" id="global_recieve_toggle"> -->
+    <div class="image-wrap" id="main-image-wrap">
+        <img id="main-image" src="" alt="idle">
+    </div>
 
     <div class="switch-group">
         <label class="switch-row">
@@ -97,7 +164,17 @@
         <label class="switch-row">
             <input type="checkbox" class="toggle" id="global_recieve_toggle"> Global recieve
         </label>
+        <label>
+            <div class="select-fancy">
+                <select name="Character" id="char" onchange="this.blur()">
+                    <option value="natsuki">Natsuki</option>
+                    <option value="yuri">Yuri</option>
+                </select>
+            </div>
+        </label>
     </div>
+
+    <div id="yuri_egg"></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -119,40 +196,75 @@
 
         const global_send_toggle = document.getElementById('global_send_toggle');
         const global_recieve_toggle = document.getElementById('global_recieve_toggle')
-
-        // console.log(toggle.checked); 
-
-        // toggle.addEventListener('change', () => {
-        // if (toggle.checked) {
-        //     console.log('ON');
-        // } else {
-        //     console.log('OFF');
-        // }
-        // });
+        const character = document.getElementById('char')
 
         const sessionId = Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+        const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+        let input = [];
 
         const mainImage = document.getElementById('main-image');
-        const personas = [
-            'natsuki1.png',
-            'natsuki2.png',
-            'natsuki3.png',
-            'natsuki4.png',
-            'natsuki5.png'
-        ];
+        const mainImageWrap = document.getElementById('main-image-wrap');
+
+        const sprites = {
+            natsuki: ['natsuki1.png', 'natsuki2.png', 'natsuki3.png', 'natsuki4.png', 'natsuki5.png'],
+            yuri: ['yuri1.png', 'yuri2.png', 'yuri3.png', 'yuri4.png', 'yuri5.png']
+        };
+        const css_color = {
+            natsuki: '#db73f0',
+            yuri: '#7d0096'
+        }
+
+        switch (character.value) {
+            case "natsuki":   
+                mainImage.src = 'natsukiIdle.png';
+                document.documentElement.style.setProperty('--character-color', css_color[character.value]);
+                break;
+            case "yuri":
+                mainImage.src = 'yuriIdle.png';
+                document.documentElement.style.setProperty('--character-color', css_color[character.value]);
+                break;
+        }
+
+        //Character changer
+        character.addEventListener('change', () => {
+            switch (character.value) {
+                case "natsuki":   
+                    mainImage.src = 'natsukiIdle.png';
+                    document.documentElement.style.setProperty('--character-color', css_color[character.value]);
+                    break;
+                case "yuri":
+                    mainImage.src = 'yuriIdle.png';
+                    document.documentElement.style.setProperty('--character-color', css_color[character.value]);
+                    break;
+            }
+        })
 
         //Local
         function triggerBoopEffect() {
             clearTimeout(window._imageTimeout);
-            const randomPersona = personas[Math.floor(Math.random() * personas.length)];
-            mainImage.src = randomPersona;
+            const activeSprites = sprites[character.value];
+            const randomPersona = activeSprites[Math.floor(Math.random() * activeSprites.length)];
+            const yuri_chance = (character.value == 'yuri') ? (Math.floor(Math.random()*100)) : 0;
+            // console.log(yuri_chance);
+            mainImage.src = (yuri_chance == 69) ? 'yuri666.png' : randomPersona;
             window._imageTimeout = setTimeout(() => {
-                mainImage.src = 'natsukiIdle.png';
+                switch (character.value) {
+                    case "natsuki":   
+                        mainImage.src = 'natsukiIdle.png';
+                        break;
+                    case "yuri":
+                        mainImage.src = 'yuriIdle.png';
+                        break;
+                }
             }, 500);
 
             const clickText = document.createElement('div');
             clickText.className = 'click-text';
-            clickText.innerText = '*boop*';
+            if (yuri_chance == 69) {
+                clickText.innerText = '*SLICE*';
+            } else {
+                clickText.innerText = '*boop*'
+            }
 
             const maxX = window.innerWidth - 120;
             const maxY = window.innerHeight - 50;
@@ -167,6 +279,30 @@
             setTimeout(() => clickText.remove(), 500);
         }
 
+        window.addEventListener('keydown', function(e) {
+            input.push(e.keyCode);
+
+            if (input.toString().indexOf(konamiCode.toString()) >= 0) {
+                if (character.value == 'yuri') {
+                    mainImage.src = 'yuriEasteregg.png';
+                    document.getElementById('yuri_egg').style.display = 'block';
+                    mainImage.style.animation = 'shake 0.5s infinite';
+                    mainImageWrap.style.bottom = '-5px';
+                    setTimeout(function() {
+                        mainImage.src = 'yuriIdle.png'
+                        document.getElementById('yuri_egg').style.display = 'none';
+                        mainImage.style.animation = 'none';
+                        mainImageWrap.style.bottom = '0';
+                    }, 500);
+                }
+                input = [];
+            }
+
+            if (input.length > konamiCode.length) {
+                input.shift();
+            }
+        });
+
         mainImage.addEventListener('click', () => {
             triggerBoopEffect();
 
@@ -174,7 +310,8 @@
 
                 const newBoopRef = boopsRef.push({
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    sessionId: sessionId
+                    sessionId: sessionId,
+                    character: character.value
                 });
 
                 setTimeout(() => {
@@ -188,7 +325,7 @@
         boopsRef.limitToLast(1).on('child_added', (snapshot) => {
             const data = snapshot.val();
 
-            if (data.sessionId === sessionId || !(global_recieve_toggle.checked) ) {
+            if (data.sessionId === sessionId || !(global_recieve_toggle.checked) || !(data.character === character.value)) {
                 return;
             }
 
