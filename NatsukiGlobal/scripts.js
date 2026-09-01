@@ -11,6 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const boopsRef = db.ref('boops');
+let egg = false;
 
 const global_send_toggle = document.getElementById('global_send_toggle');
 const global_recieve_toggle = document.getElementById('global_recieve_toggle')
@@ -57,6 +58,25 @@ character.addEventListener('change', () => {
     }
 })
 
+function createBoopText(text, timeout = 500, color = 'black') {
+    const clickText = document.createElement('div');
+    clickText.className = 'click-text';
+    clickText.innerText = text;
+    clickText.style.color = color;
+
+    const maxX = window.innerWidth - 120;
+    const maxY = window.innerHeight - 50;
+    const randomX = Math.max(10, Math.random() * maxX);
+    const randomY = Math.max(10, Math.random() * maxY);
+
+    clickText.style.left = randomX + 'px';
+    clickText.style.top = randomY + 'px';
+    clickText.style.transform = `rotate(${(Math.random()*60)-30}deg)`;
+
+    document.body.appendChild(clickText);
+    setTimeout(() => clickText.remove(), timeout);
+}
+
 //Local
 function triggerBoopEffect() {
     clearTimeout(window._imageTimeout);
@@ -101,17 +121,62 @@ window.addEventListener('keydown', function(e) {
     input.push(e.keyCode);
 
     if (input.toString().indexOf(konamiCode.toString()) >= 0) {
-        if (character.value == 'yuri') {
-            mainImage.src = 'yuriEasteregg.png';
-            document.getElementById('yuri_egg').style.display = 'block';
-            mainImage.style.animation = 'shake 0.5s infinite';
-            mainImageWrap.style.bottom = '-5px';
-            setTimeout(function() {
-                mainImage.src = 'yuriIdle.png'
-                document.getElementById('yuri_egg').style.display = 'none';
-                mainImage.style.animation = 'none';
-                mainImageWrap.style.bottom = '0';
-            }, 500);
+        egg = true;
+        switch (character.value) {
+            case 'yuri':
+                mainImage.src = 'yuriEasteregg.png';
+                document.getElementById('yuri_egg').style.display = 'block';
+                mainImage.style.animation = 'shake 0.5s infinite';
+                mainImageWrap.style.bottom = '-5px';
+                setTimeout(function() {
+                    mainImage.src = 'yuriIdle.png';
+                    document.getElementById('yuri_egg').style.display = 'none';
+                    mainImage.style.animation = 'none';
+                    mainImageWrap.style.bottom = '0';
+                }, 500);
+                egg = false;
+                break;
+            case 'natsuki':
+                mainImage.src = 'natsuki666.gif';
+                document.getElementById('yuri_egg').style.display = 'block';
+                document.getElementById('yuri_egg').style.backgroundColor = 'rgba(155, 0, 0, 0.36)';
+                createBoopText('play with me', 500);
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(function() {
+                        createBoopText('play with me', 500);
+                    }, 100 * i);
+                }
+                setTimeout(function() {
+                    mainImage.src = 'natsuki666_2.gif';
+                    const neck_snap = new Audio('crack.ogg');
+                    neck_snap.play();
+                    document.getElementById('yuri_egg').style.backgroundColor = 'rgba(179, 0, 0, 0.53)';
+                    for (let i = 0; i < 12; i++) {
+                        setTimeout(function() {
+                            createBoopText('PLAY WITH ME', 500, 'red');
+                        }, 100 * i);
+                    }
+                    setTimeout(function() {
+                        mainImage.style.animation = 'zoomInScreamer 0.5s forwards';
+                        const run = new Audio('run.ogg');
+                        run.play();
+                    }, 300);
+                    for (let i = 0; i < 6; i++) {
+                        setTimeout(function() {
+                            createBoopText('PLAY WITH ME', 500, 'red');
+                        }, 50 * i);
+                    }
+                    setTimeout(function() {
+                        document.getElementById('yuri_egg').style.backgroundColor = 'rgb(0, 0, 0)'
+                    }, 650);
+                }, 1700);
+                setTimeout(function() {
+                    mainImage.style.animation = 'none';
+                    mainImage.src = 'natsukiIdle.png';
+                    document.getElementById('yuri_egg').style.display = 'none';
+                    document.getElementById('yuri_egg').style.backgroundColor = 'rgba(209, 0, 0, 0.5)';
+                    egg = false;
+                }, 3700);
         }
         input = [];
     }
@@ -143,7 +208,7 @@ mainImage.addEventListener('click', () => {
 boopsRef.limitToLast(1).on('child_added', (snapshot) => {
     const data = snapshot.val();
 
-    if (data.sessionId === sessionId || !(global_recieve_toggle.checked) || !(data.character === character.value)) {
+    if (data.sessionId === sessionId || !(global_recieve_toggle.checked) || !(data.character === character.value) || egg === true) {
         return;
     }
 

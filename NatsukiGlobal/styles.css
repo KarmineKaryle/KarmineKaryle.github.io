@@ -18,6 +18,7 @@ body, html {
     cursor: pointer;
     user-select: none;
     -webkit-user-drag: none;
+    /* transform-origin: top center; */
 }
 .click-text {
     position: absolute;
@@ -52,6 +53,14 @@ body, html {
     80% { transform: translate(-1px, -1px) rotate(1deg); }
     90% { transform: translate(1px, 2px) rotate(0deg); }
     100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+@keyframes zoomInScreamer {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(6);
+  }
 }
 .toggle {
     appearance: none;
