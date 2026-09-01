@@ -1,0 +1,142 @@
+* { margin:0; padding:0; }
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ffffff;
+}
+.image-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100vh;
+}
+#main-image {
+    height: 100vh;
+    width: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.click-text {
+    position: absolute;
+    font-family: Arial, sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #000000;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+}
+#yuri_egg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(209, 0, 0, 0.5);
+    z-index: 9999;
+}
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+.toggle {
+    appearance: none;
+    width: 52px;
+    height: 28px;
+    background: #ccc;
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: .3s;
+    outline: none;
+    flex-shrink: 0;
+}
+.toggle::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: .3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+}
+.toggle:checked {
+    background: var(--character-color, #db73f0);
+}
+.toggle:checked::after {
+    left: 26px;
+}
+
+.switch-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;     
+    padding: 20px;
+}
+.switch-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;     
+    font-family: sans-serif;
+    cursor: pointer;
+    user-select: none;
+}
+
+.select-fancy {
+    display: inline-block;
+    position: relative;
+}
+
+.select-fancy select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    border: 2px solid #b0b0b0;
+    padding: 10px 36px 10px 10px;
+
+    background-color: #ffffff;
+    font-size: 16px;
+    font-family: inherit;
+    color: #333;
+
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+    min-width: 1px;
+}
+
+.select-fancy select:hover,
+.select-fancy select:focus {
+    border-color: var(--character-color, #db73f0);
+}
+
+.select-fancy::after {
+    content: "▼";
+    font-size: 12px;
+    color: #888;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: transform 0.2s;
+}
