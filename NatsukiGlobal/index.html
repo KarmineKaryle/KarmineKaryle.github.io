@@ -17,7 +17,7 @@
         <img id="main-image" src="" alt="idle">
     </div>
 
-    <div class="switch-group">
+    <div class="switch-group" id="switch-div">
         <label class="switch-row">
             <input type="checkbox" class="toggle" id="global_send_toggle"> Global send
         </label>
@@ -29,13 +29,16 @@
                 <select name="Character" id="char" onchange="this.blur()">
                     <option value="natsuki">Natsuki</option>
                     <option value="yuri">Yuri</option>
+                    <option value="sayori">Sayori</option>
                 </select>
             </div>
         </label>
     </div>
     
+    <div id="yuri_egg_2"></div>
 
     <div id="yuri_egg"></div>
+    
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>

@@ -26,36 +26,27 @@ const mainImageWrap = document.getElementById('main-image-wrap');
 
 const sprites = {
     natsuki: ['natsuki1.png', 'natsuki2.png', 'natsuki3.png', 'natsuki4.png', 'natsuki5.png'],
-    yuri: ['yuri1.png', 'yuri2.png', 'yuri3.png', 'yuri4.png', 'yuri5.png']
+    yuri: ['yuri1.png', 'yuri2.png', 'yuri3.png', 'yuri4.png', 'yuri5.png'],
+    sayori: ['sayori1.png', 'sayori2.png', 'sayori3.png', 'sayori4.png', 'sayori5.png']
 };
+const idle_sprites = {
+    natsuki: 'natsukiIdle.png',
+    yuri: 'yuriIdle.png',
+    sayori: 'sayoriIdle.png'
+}
 const css_color = {
     natsuki: '#db73f0',
-    yuri: '#7d0096'
+    yuri: '#7d0096',
+    sayori: '#f1a796'
 }
 
-switch (character.value) {
-    case "natsuki":   
-        mainImage.src = 'natsukiIdle.png';
-        document.documentElement.style.setProperty('--character-color', css_color[character.value]);
-        break;
-    case "yuri":
-        mainImage.src = 'yuriIdle.png';
-        document.documentElement.style.setProperty('--character-color', css_color[character.value]);
-        break;
-}
+document.documentElement.style.setProperty('--character-color', css_color[character.value]);
+mainImage.src = idle_sprites[character.value]
 
 //Character changer
 character.addEventListener('change', () => {
-    switch (character.value) {
-        case "natsuki":   
-            mainImage.src = 'natsukiIdle.png';
-            document.documentElement.style.setProperty('--character-color', css_color[character.value]);
-            break;
-        case "yuri":
-            mainImage.src = 'yuriIdle.png';
-            document.documentElement.style.setProperty('--character-color', css_color[character.value]);
-            break;
-    }
+    mainImage.src = idle_sprites[character.value];
+    document.documentElement.style.setProperty('--character-color', css_color[character.value]);
 })
 
 function createBoopText(text, timeout = 500, color = 'black') {
@@ -86,14 +77,7 @@ function triggerBoopEffect() {
     // console.log(yuri_chance);
     mainImage.src = (yuri_chance == 69) ? 'yuri666.png' : randomPersona;
     window._imageTimeout = setTimeout(() => {
-        switch (character.value) {
-            case "natsuki":   
-                mainImage.src = 'natsukiIdle.png';
-                break;
-            case "yuri":
-                mainImage.src = 'yuriIdle.png';
-                break;
-        }
+        mainImage.src = idle_sprites[character.value]
     }, 500);
 
     const clickText = document.createElement('div');
@@ -177,6 +161,26 @@ window.addEventListener('keydown', function(e) {
                     document.getElementById('yuri_egg').style.backgroundColor = 'rgba(209, 0, 0, 0.5)';
                     egg = false;
                 }, 3700);
+                break;
+            case 'sayori':
+                mainImage.src = 'sayori666.png';
+                document.getElementById('yuri_egg').style.background = 'rgba(0, 0, 0, 0)'
+                document.getElementById('yuri_egg').style.display = 'block';
+                const sayonara = new Audio('sayonara.ogg');
+                sayonara.play();
+                sayonara.onended = function() { 
+                    window.open('','_self').close();
+                };
+                setTimeout(function() {
+                    mainImage.style.animation = 'grayscaler 20s forwards';
+                    setTimeout(function() {
+                        document.getElementById('yuri_egg').style.display = 'block';
+                        document.getElementById('yuri_egg_2').style.display = 'block';
+                        document.getElementById('yuri_egg').style.animation = 'screenoff 0.7s ease-in-out forwards';
+                        mainImage.remove();
+                    }, 20000)
+                }, 7000)
+                document.getElementById('switch-div').remove();
         }
         input = [];
     }

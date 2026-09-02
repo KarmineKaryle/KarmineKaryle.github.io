@@ -41,6 +41,16 @@ body, html {
     background-color: rgba(209, 0, 0, 0.5);
     z-index: 9999;
 }
+#yuri_egg_2 {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+    z-index: 9998;
+}
 @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
     10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -60,6 +70,60 @@ body, html {
   }
   100% {
     transform: scale(6);
+  }
+}
+@keyframes grayscaler {
+    0% {
+        filter: grayscale(0%);
+    }
+    100% {
+        filter: grayscale(100%);
+    }
+}
+@keyframes screenoff {
+  0% {
+    height: 100vh;
+    background: black;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+  }
+  10% {
+    background: white;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+  }
+  50% {
+    height: 1px;
+    background: white;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+  }
+  80% {
+    height: 1px;
+    width: 150vh;
+    background: white;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+  }
+  81% {
+    height: 1px;
+    width: 1vh;
+    background: white;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+  }
+  100% {
+    height: 1px;
+    width: 0.2vh;
+    background: black;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
   }
 }
 .toggle {
