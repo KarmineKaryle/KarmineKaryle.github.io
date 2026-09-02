@@ -86,7 +86,7 @@ function triggerBoopEffect() {
         clickText.innerText = '*SLICE*';
     } else {
         clickText.innerText = '*boop*'
-    }
+    } 
 
     const maxX = window.innerWidth - 120;
     const maxY = window.innerHeight - 50;
