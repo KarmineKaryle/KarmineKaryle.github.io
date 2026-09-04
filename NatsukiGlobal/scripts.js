@@ -27,17 +27,20 @@ const mainImageWrap = document.getElementById('main-image-wrap');
 const sprites = {
     natsuki: ['natsuki1.png', 'natsuki2.png', 'natsuki3.png', 'natsuki4.png', 'natsuki5.png'],
     yuri: ['yuri1.png', 'yuri2.png', 'yuri3.png', 'yuri4.png', 'yuri5.png'],
-    sayori: ['sayori1.png', 'sayori2.png', 'sayori3.png', 'sayori4.png', 'sayori5.png']
+    sayori: ['sayori1.png', 'sayori2.png', 'sayori3.png', 'sayori4.png', 'sayori5.png'],
+    monika: ['monika1.png', 'monika2.png', 'monika3.png', 'monika4.png', 'monika5.png'],
 };
 const idle_sprites = {
     natsuki: 'natsukiIdle.png',
     yuri: 'yuriIdle.png',
-    sayori: 'sayoriIdle.png'
+    sayori: 'sayoriIdle.png',
+    monika: 'monikaIdle.png'
 }
 const css_color = {
     natsuki: '#db73f0',
     yuri: '#7d0096',
-    sayori: '#f1a796'
+    sayori: '#f1a796',
+    monika: '#12b651'
 }
 
 document.documentElement.style.setProperty('--character-color', css_color[character.value]);
@@ -109,6 +112,7 @@ window.addEventListener('keydown', function(e) {
         switch (character.value) {
             case 'yuri':
                 mainImage.src = 'yuriEasteregg.png';
+                document.getElementById('yuri_egg').style.backgroundColor = 'rgba(179, 0, 0, 0.53)';
                 document.getElementById('yuri_egg').style.display = 'block';
                 mainImage.style.animation = 'shake 0.5s infinite';
                 mainImageWrap.style.bottom = '-5px';
@@ -181,6 +185,18 @@ window.addEventListener('keydown', function(e) {
                     }, 20000)
                 }, 7000)
                 document.getElementById('switch-div').remove();
+                break;
+            case 'monika':
+                mainImage.src = 'monika666.png';
+                document.getElementById('yuri_egg').style.background = 'rgba(0, 0, 0, 0)'
+                document.getElementById('yuri_egg').style.display = 'block';
+                const welcome = new Audio('welcome.ogg');
+                welcome.play();
+                welcome.onended = function() { 
+                    mainImage.src = 'monikaIdle.png';
+                    document.getElementById('yuri_egg').style.display = 'none';
+                    egg = false;
+                }
         }
         input = [];
     }
